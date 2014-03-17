@@ -222,8 +222,16 @@ class CMDR_Dual_Synchronizer {
 			}
 		}
 
-		if ( count( $subscribers ) ) {
-			$result = $wrap_s->import( $subscribers, true );
+		while ( count( $subscribers ) ) {
+			$subscribers1000 = array();
+			for ( $i = 0; $i < 1000; $i++ ) {
+				$subscribers1000 = array_shift( $subscribers );
+				if ( ! count( $subscribers ) ) {
+					break;
+				}
+			}
+
+			$result = $wrap_s->import( $subscribers1000, true );
 			if ( ! $result->was_successful() ) {
 				self::$error = $result->response;
 				return false;

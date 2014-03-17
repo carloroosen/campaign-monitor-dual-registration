@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Campaign Monitor Dual Registration
-Version: 1.0.1
+Version: 1.0.2
 Author: Carlo Roosen, Elena Mukhina
 Author URI: http://www.carloroosen.com/
 */
