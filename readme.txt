@@ -21,7 +21,7 @@ This plugin is written as an alternative for our plugin "Campaign Monitor Synchr
 = Links =
 
 * [Author's website](http://carloroosen.com/)
-* [Plugin page](http://carloroosen.com/campaign-monitor-synchronisation/)
+* [Plugin page](http://carloroosen.com/campaign-monitor-dual-registration)
 
 == Installation ==
 
@@ -38,3 +38,5 @@ This plugin is written as an alternative for our plugin "Campaign Monitor Synchr
 
 = 1.0.1 =
 * First commit
+= 1.0.2 =
+* support for 1000+ users
