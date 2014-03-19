@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Campaign Monitor Dual Registration
-Version: 1.0.2
+Version: 1.0.3
 Author: Carlo Roosen, Elena Mukhina
 Author URI: http://www.carloroosen.com/
 */
@@ -56,7 +56,11 @@ function cmdr_plugin_menu() {
 		}
 		
 		if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
-			update_option( 'cmdr_user_fields', base64_encode( serialize( ( array ) $_POST[ 'cmdr_user_fields' ] ) ) );
+			if ( isset( $_POST[ 'cmdr_user_fields' ] ) ) {
+				update_option( 'cmdr_user_fields', base64_encode( serialize( ( array ) $_POST[ 'cmdr_user_fields' ] ) ) );
+			} else {
+				update_option( 'cmdr_user_fields', base64_encode( serialize( array() ) ) );
+			}
 			update_option( 'cmdr_api_key', $_POST[ 'cmdr_api_key' ] );
 			update_option( 'cmdr_list_id', $_POST[ 'cmdr_list_id' ] );
 			
@@ -300,9 +304,9 @@ function cmdr_cm_sync() {
 		
 		foreach( $deserialised_data->Events as $subscriber ) {
 			if ( ! empty( $subscriber->OldEmailAddress ) ) {
-				$user = get_user_by_email( $subscriber->OldEmailAddress );
+				$user = get_user_by( 'email', $subscriber->OldEmailAddress );
 			} else {
-				$user = get_user_by_email( $subscriber->EmailAddress );
+				$user = get_user_by( 'email', $subscriber->EmailAddress );
 			}
 			
 			if ( $user ) {

@@ -4,7 +4,7 @@ Donate link:
 Tags: Campaign Monitor, user management, mailing list
 Requires at least: 3.0.1
 Tested up to: 3.8.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,3 +40,5 @@ This plugin is written as an alternative for our plugin "Campaign Monitor Synchr
 * First commit
 = 1.0.2 =
 * support for 1000+ users
+= 1.0.3 =
+* Fix some notices.
