@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Campaign Monitor Dual Registration
-Description: Caution, this plugin has been renamed. You need to de-install the plugin, remove the files and install the plugin under its new name 'campaign-monitor-dual-registration'
+Description: This plugin automatically adds new Wordpress users to your Campaign Monitor list.
 Version: 1.0.4
 Author: Carlo Roosen, Elena Mukhina
 Author URI: http://www.carloroosen.com/
