@@ -3,7 +3,7 @@ Contributors: carloroosen, pilotessa
 Tags: Campaign Monitor, user management, mailing list, add users
 Requires at least: 3.0.1
 Tested up to: 3.9
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,3 +47,5 @@ Our plugin [Campaign Monitor Synchronization](http://wordpress.org/plugins/campa
 * Fix some notices.
 = 1.0.4 =
 * Fix subscribers import bug.
+= 1.0.5 =
+* More detailed error output.

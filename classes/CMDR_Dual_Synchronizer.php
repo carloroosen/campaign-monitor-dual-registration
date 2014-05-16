@@ -25,8 +25,8 @@ class CMDR_Dual_Synchronizer {
 			
 			$args[ 'EmailAddress' ] = $user->user_email;
 			$args[ 'Name' ] = $user->first_name . ' ' . $user->last_name;
-			foreach( $cms_user_fields as $key => $field ) {
-				if ( ! in_array( $field, $cms_fields_to_hide ) ) {
+			foreach( $cmdr_user_fields as $key => $field ) {
+				if ( ! in_array( $field, $cmdr_fields_to_hide ) ) {
 					if ( is_scalar( get_user_meta( $user->ID, $field, true ) ) ) {
 						$args[ 'CustomFields' ][] = array( 'Key' => $field, 'Value' => get_user_meta( $user->ID, $field, true ) );
 					} else {

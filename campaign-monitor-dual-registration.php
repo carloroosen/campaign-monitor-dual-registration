@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Campaign Monitor Dual Registration
-Version: 1.0.4
+Version: 1.0.5
 Author: Carlo Roosen, Elena Mukhina
 Author URI: http://www.carloroosen.com/
 */
@@ -12,7 +12,7 @@ define( 'CMDR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 // Global variables
 global $cmdr_fields_to_hide;
 
-register_deactivation_hook( __FILE__, 'cms_webhook_remove' );
+register_deactivation_hook( __FILE__, 'cmdr_webhook_remove' );
 
 add_action( 'admin_menu', 'cmdr_plugin_menu' );
 add_action( 'init', 'cmdr_api_init' );
@@ -26,7 +26,7 @@ add_filter( 'update_user_metadata', 'cmdr_user_meta_update', 1000, 5 );
 require_once CMDR_PLUGIN_PATH . 'classes/CMDR_Dual_Synchronizer.php';
 
 // Remove the webhook if needed
-function cms_webhook_remove() {
+function cmdr_webhook_remove() {
 	if ( ! class_exists( 'CS_REST_Lists' ) ) {
 		require_once CMDR_PLUGIN_PATH . 'campaignmonitor-createsend-php/csrest_lists.php';
 	}
@@ -130,7 +130,7 @@ function cmdr_plugin_menu() {
 			if ( $result ) {
 				wp_redirect( home_url( '/wp-admin/plugins.php?page=cm-dual-registration&saved=true' ) );
 			} else {
-				wp_redirect( home_url( '/wp-admin/plugins.php?page=cm-dual-registration&error=' . urlencode( CMDR_Dual_Synchronizer::$error->Message ) ) );
+				wp_redirect( home_url( '/wp-admin/plugins.php?page=cm-dual-registration&error=' . urlencode( CMDR_Dual_Synchronizer::$error->Message . ( ! empty( CMDR_Dual_Synchronizer::$error->ResultData ) ? '<br />Error details: ' . json_encode( CMDR_Dual_Synchronizer::$error->ResultData ) : '' ) ) ) );
 			}
 		}
 	}
@@ -297,7 +297,6 @@ function cmdr_cm_sync() {
 	if ( trim( $list_id ) == trim( get_option( 'cmdr_list_id' ) ) ) {
 		$cmdr_user_fields = ( array ) unserialize( base64_decode( get_option( 'cmdr_user_fields' ) ) );
 	
-		remove_action( 'init', 'cmdr_api_init' );
 		remove_action( 'profile_update', 'cmdr_user_update', 10 );
 		remove_action( 'user_register', 'cmdr_user_insert' );
 		remove_filter( 'update_user_metadata', 'cmdr_user_meta_update', 1000 );
