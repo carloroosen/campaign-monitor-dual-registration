@@ -59,8 +59,6 @@ class CMDR_Dual_Synchronizer {
 	public static function cmdr_mass_update() {
 		global $cmdr_fields_to_hide;
 		
-		set_time_limit ( 3600 );
-		
 		$cmdr_user_fields = ( array ) unserialize( base64_decode( get_option( 'cmdr_user_fields' ) ) );
 		
 		if ( ! class_exists( 'CS_REST_Lists' ) ) {
@@ -123,6 +121,8 @@ class CMDR_Dual_Synchronizer {
 		while ( count( $result->response->Results ) ) {
 			if ( ! empty( $result->response->Results ) && is_array( $result->response->Results ) ) {
 				foreach( $result->response->Results as $key => $subscriber ) {
+					set_time_limit ( 60 );
+					
 					$user = get_user_by( 'email', $subscriber->EmailAddress );
 
 					if ( $user ) {
@@ -152,9 +152,9 @@ class CMDR_Dual_Synchronizer {
 						}
 						
 						if ( count( $args ) ) {
-							$result = $wrap_s->update( $user->user_email, $args );
-							if ( ! $result->was_successful() ) {
-								self::$error = $result->response;
+							$result_tmp = $wrap_s->update( $user->user_email, $args );
+							if ( ! $result_tmp->was_successful() ) {
+								self::$error = $result_tmp->response;
 								return false;
 							}
 						}
@@ -176,26 +176,44 @@ class CMDR_Dual_Synchronizer {
 
 		// Get bounced and unsubscribed users
 		$unsubscribed = array();
-		$result = $wrap_l->get_unsubscribed_subscribers();
+		$result = $wrap_l->get_unsubscribed_subscribers( '', 1, 1000 );
 		if ( ! $result->was_successful() ) {
 			self::$error = $result->response;
 			return false;
 		}
-		if ( ! empty( $result->response->Results ) && is_array( $result->response->Results ) ) {
+		$i = 2;
+		while ( count( $result->response->Results ) ) {
 			foreach( $result->response->Results as $key => $subscriber ) {
 				$unsubscribed[] = $subscriber->EmailAddress;
 			}
+
+			$result = $wrap_l->get_unsubscribed_subscribers( '', $i, 1000 );
+			if ( ! $result->was_successful() ) {
+				self::$error = $result->response;
+				return false;
+			}
+			$i ++;
 		}
+
+		
 		$bounced = array();
-		$result = $wrap_l->get_bounced_subscribers();
+		$result = $wrap_l->get_bounced_subscribers( '', 1, 1000 );
 		if ( ! $result->was_successful() ) {
 			self::$error = $result->response;
 			return false;
 		}
-		if ( ! empty( $result->response->Results ) && is_array( $result->response->Results ) ) {
+		$i = 2;
+		while ( count( $result->response->Results ) ) {
 			foreach( $result->response->Results as $key => $subscriber ) {
 				$bounced[] = $subscriber->EmailAddress;
 			}
+
+			$result = $wrap_l->get_bounced_subscribers( '', $i, 1000 );
+			if ( ! $result->was_successful() ) {
+				self::$error = $result->response;
+				return false;
+			}
+			$i ++;
 		}
 
 		$subscribers = array();
@@ -229,6 +247,8 @@ class CMDR_Dual_Synchronizer {
 		}
 
 		while ( count( $subscribers ) ) {
+			set_time_limit ( 60 );
+			
 			$subscribers1000 = array();
 			for ( $i = 0; $i < 1000; $i++ ) {
 				$subscribers1000[] = array_shift( $subscribers );
